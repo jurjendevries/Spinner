@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spinner</title>
+  <style>
+    .spinner {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('https://cdn.jsdelivr.net/gh/mathusummut/confetti.js/demo/images/confetti.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner" id="spinner"></div>
+
+  <script>
+    const items = [
+      "Gezond",
+      "Tonijn salade",
+      "Brie",
+      "Carpaccio",
+      "Vitello tonato",
+      "Filet Americain",
+      "Gerookte kipfilet"
+    ];
+
+    const spinner = document.getElementById('spinner');
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+
+    let spinning = false;
+    let selectedItem = null;
+
+    spinner.addEventListener('click', spin);
+    spinner.addEventListener('touchstart', spin);
+
+    function spin() {
+      if (spinning) return;
+
+      spinning = true;
+      const spinAngle = Math.floor(Math.random() * 360 + 720);
+      const itemAngle = 360 / items.length;
+      selectedItem = Math.floor(spinAngle / itemAngle) % items.length;
+
+      spinner.style.transform = `rotate(${spinAngle}deg)`;
+
+      setTimeout(() => {
+        confetti.innerHTML = `
+          <div class="item" style="background-color: ${getRandomColor()};">
+            ${items[selectedItem]}
+          </div>
+        `;
+        confetti.style.opacity = '1';
+        setTimeout(() => {
+          spinning = false;
+          spinner.style.transform = '';
+          confetti.style.opacity = '0';
+        }, 3000);
+      }, 500);
+    }
+
+    function getRandomColor() {
+      const colors = ['#FF5722', '#FF9800', '#FFC107', '#FFEB3B', '#CDDC39', '#8BC34A', '#4CAF50', '#009688', '#00BCD4', '#03A9F4', '#2196F3', '#3F51B5', '#673AB7', '#9C27B0', '#E91E63', '#F44336'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+  </script>
+</body>
+</html>
