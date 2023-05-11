@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #spinner {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            user-select: none;
+        }
+        .slice {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            pointer-events: none;
+        }
+        #pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 50%;
+            background: black;
+            transform: translate(-50%, -100%);
+            z-index: 10;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="spinner"></div>
+    <div id="pointer"></div>
+    <div id="result"></div>
+    <script>
+        var items = ["Gezond", "Tonijn salade", "Brie", "Carpaccio", "Vitello tonato", "Filet Americain", "Gerookte kipfilet"];
+        var spinner = document.getElementById('spinner');
+        var resultDiv = document.getElementById('result');
+        var colors = ["#F44336", "#E91E63", "#9C27B0", "#673AB7", "#3F51B5", "#2196F3", "#03A9F4"];
+
+        for(var i = 0; i < items.length; i++){
+            var slice = document.createElement('div');
+            slice.className = 'slice';
+            slice.style.transform = 'rotate(' + (i * 360 / items.length) + 'deg)';
+            slice.style.background = colors[i % colors.length];
+            spinner.appendChild(slice);
+        }
+
+        spinner.onclick = function() {
+            var deg = Math.floor(360 * Math.random());
+            spinner.style.transform = 'rotate(' + deg + 'deg)';
+            var chosenItem = items[Math.floor(deg / (360 / items.length))];
+            resultDiv.innerHTML = 'You got: ' + chosenItem;
+            confetti();
+        };
+
+        function confetti() {
+            for(var i = 0; i < 100; i++){
+                var confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.background = colors[i % colors.length];
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = Math.random() * window.innerHeight + 'px';
+                document.body.appendChild(confetti);
+                setTimeout(function() {
+                    document.body.removeChild(confetti);
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
